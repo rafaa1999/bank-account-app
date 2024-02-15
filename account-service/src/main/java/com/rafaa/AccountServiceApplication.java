@@ -1,5 +1,6 @@
 package com.rafaa;
 
+import com.rafaa.clients.CustomerRestClient;
 import com.rafaa.entities.BankAccount;
 import com.rafaa.enums.AccountType;
 import com.rafaa.repository.BankAccountRepository;
@@ -20,27 +21,29 @@ public class AccountServiceApplication {
     }
 
    @Bean
-   public CommandLineRunner runner(BankAccountRepository bankAccountRepository){
+   public CommandLineRunner runner(BankAccountRepository bankAccountRepository, CustomerRestClient customerRestClient){
         return args -> {
-            BankAccount bankAccount_one = BankAccount.builder()
-                    .accountId(UUID.randomUUID().toString())
-                    .currency("MAD")
-                    .balance(4673)
-                    .createAt(LocalDate.now())
-                    .type(AccountType.CURRENT_ACCOUNT)
-                    .customerId(Long.valueOf(1))
-                    .build();
-            BankAccount bankAccount_two = BankAccount.builder()
-                    .accountId(UUID.randomUUID().toString())
-                    .currency("MAD")
-                    .balance(34563)
-                    .createAt(LocalDate.now())
-                    .type(AccountType.SAVING_ACCOUNT)
-                    .customerId(Long.valueOf(2))
-                    .build();
+            customerRestClient.allCustomers().forEach(c -> {
+                BankAccount bankAccount_one = BankAccount.builder()
+                        .accountId(UUID.randomUUID().toString())
+                        .currency("MAD")
+                        .balance(Math.random()*8000)
+                        .createAt(LocalDate.now())
+                        .type(AccountType.CURRENT_ACCOUNT)
+                        .customerId(c.getId())
+                        .build();
+                BankAccount bankAccount_two = BankAccount.builder()
+                        .accountId(UUID.randomUUID().toString())
+                        .currency("MAD")
+                        .balance(Math.random()*10000)
+                        .createAt(LocalDate.now())
+                        .type(AccountType.SAVING_ACCOUNT)
+                        .customerId(c.getId())
+                        .build();
 
-            bankAccountRepository.save(bankAccount_one);
-            bankAccountRepository.save(bankAccount_two);
+                bankAccountRepository.save(bankAccount_one);
+                bankAccountRepository.save(bankAccount_two);
+            });
         };
    }
 }
