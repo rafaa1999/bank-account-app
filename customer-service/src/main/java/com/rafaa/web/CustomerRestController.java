@@ -1,6 +1,6 @@
-package com.rafaa.controller;
+package com.rafaa.web;
 
-import com.rafaa.model.Customer;
+import com.rafaa.entities.Customer;
 import com.rafaa.repository.CustomerRepository;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,7 +21,7 @@ public class CustomerRestController {
        return customerRepository.findAll();
    }
 
-   @GetMapping("/customer/{id}")
+   @GetMapping("/customers/{id}")
    public Customer customerById(@PathVariable Long id){
        return customerRepository.findById(id).get();
    }

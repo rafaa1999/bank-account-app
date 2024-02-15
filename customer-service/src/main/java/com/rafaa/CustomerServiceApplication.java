@@ -1,6 +1,6 @@
 package com.rafaa;
 
-import com.rafaa.model.Customer;
+import com.rafaa.entities.Customer;
 import com.rafaa.repository.CustomerRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

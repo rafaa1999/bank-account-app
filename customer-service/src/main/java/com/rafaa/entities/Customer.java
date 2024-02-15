@@ -1,4 +1,4 @@
-package com.rafaa.model;
+package com.rafaa.entities;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
