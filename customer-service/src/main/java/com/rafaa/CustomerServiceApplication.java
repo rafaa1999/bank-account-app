@@ -27,9 +27,9 @@ public class CustomerServiceApplication {
                             .email("fin@gmail.com")
                             .build(),
                     Customer.builder()
-                            .firstName("fin")
-                            .LastName("yakov")
-                            .email("fin@gmail.com")
+                            .firstName("gilbert")
+                            .LastName("berlin")
+                            .email("gilbert@gmail.com")
                             .build()
             );
 
