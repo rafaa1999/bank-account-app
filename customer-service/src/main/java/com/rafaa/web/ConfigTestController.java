@@ -1,12 +1,16 @@
 package com.rafaa.web;
 
+import com.rafaa.config.GlobalConfig;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
 
 @RestController
+@RefreshScope
 public class ConfigTestController {
    @Value("${global.params.p1}")
    private int p1;
@@ -16,8 +20,14 @@ public class ConfigTestController {
 //   private int x;
 //   @Value("${global.params.y}")
 //   private int y;
-   @RequestMapping("/testConfig")
+   @Autowired
+   private GlobalConfig globalConfig;
+   @GetMapping("/testConfig")
    public Map<String,Integer> configTest(){
        return Map.of("p1", p1, "p2", p2);
+   }
+   @GetMapping("/globalConfig")
+   public GlobalConfig globalConfig() {
+      return globalConfig;
    }
 }
