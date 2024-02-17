@@ -21,7 +21,56 @@ services:
       - '9999'
     environment:
       - DISCOVERY_SERVICE_URL=http://discovery-service:8761/eureka
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9999/actuator/health"]
+      interval: 10s
+      retries: 4
     depends_on:
        discovery-service:
+        condition: service_healthy
+
+  customer-service:
+    build: ./customer-service
+    container_name: customer-service
+    ports:
+      - '8081:8081'
+    expose:
+      - '8081'
+    environment:
+      - DISCOVERY_SERVICE_URL=http://discovery-service:8761/eureka
+      - CONFIG_SERVICE_URL=http://config-service:9999
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8081/actuator/health"]
+      interval: 10s
+      retries: 4
+    depends_on:
+       config-service:
          condition: service_healthy
 
+  account-service:
+    build: ./account-service
+    container_name: account-service
+    ports:
+      - '8082:8082'
+    expose:
+      - '8082'
+    environment:
+      - DISCOVERY_SERVICE_URL=http://discovery-service:8761/eureka
+      - CONFIG_SERVICE_URL=http://config-service:9999
+    depends_on:
+      customer-service:
+        condition: service_healthy
+
+  gateway-service:
+    build: ./gateway-service
+    container_name: gateway-service
+    ports:
+      - '8080:8080'
+    expose:
+      - '8080'
+    environment:
+      - DISCOVERY_SERVICE_URL=http://discovery-service:8761/eureka
+      - CONFIG_SERVICE_URL=http://config-service:9999
+    depends_on:
+      config-service:
+        condition: service_healthy
